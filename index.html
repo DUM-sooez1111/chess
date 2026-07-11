@@ -268,6 +268,7 @@
       const qrImage = document.getElementById("qrImage");
       const mobileUrl = document.getElementById("mobileUrl");
       const qrNote = document.getElementById("qrNote");
+      const publicGameUrl = "https://dum-sooez1111.github.io/chess/";
 
       const startPieces = [
         ["♜", "♞", "♝", "♛", "♚", "♝", "♞", "♜"],
@@ -868,7 +869,7 @@
       }
 
       function updateQrCode() {
-        const url = mobileUrl.value.trim() || window.location.href;
+        const url = mobileUrl.value.trim() || publicGameUrl || window.location.href;
         mobileUrl.value = url;
         qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(url)}`;
         qrNote.textContent = url.startsWith("file:")
@@ -889,7 +890,7 @@
       qrOpenButton.addEventListener("click", openQrPanel);
       qrCloseButton.addEventListener("click", closeQrPanel);
       qrUpdateButton.addEventListener("click", updateQrCode);
-      mobileUrl.value = window.location.href;
+      mobileUrl.value = publicGameUrl;
       updateQrCode();
       createBoard();
       info.textContent = "1P 하얀말 차례입니다.";
