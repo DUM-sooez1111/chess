@@ -15,9 +15,9 @@
         display: grid;
         place-items: center;
         background:
-          radial-gradient(circle at center, rgba(232, 224, 209, 0.98) 0%, rgba(232, 224, 209, 0.98) 48%, rgba(20, 18, 18, 0.16) 100%),
+          linear-gradient(135deg, rgba(246, 239, 221, 0.92), rgba(205, 216, 205, 0.82)),
           #e8e0d1;
-        color: #202326;
+        color: #241b13;
         font-family: Arial, sans-serif;
         transition:
           background 360ms ease,
@@ -35,11 +35,13 @@
         display: grid;
         gap: 14px;
         justify-items: center;
+        padding: 18px;
       }
 
       h1 {
         margin: 0;
         font-size: 32px;
+        text-shadow: 0 2px 0 rgba(255, 255, 255, 0.48);
       }
 
       #board {
@@ -48,8 +50,16 @@
         display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(8, 1fr);
-        border: 8px solid #5b3f28;
-        box-shadow: 0 18px 40px rgba(32, 35, 38, 0.24);
+        padding: 10px;
+        border: 12px solid #4f2f17;
+        border-radius: 10px;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent 18%, rgba(0, 0, 0, 0.12) 52%, transparent 82%),
+          repeating-linear-gradient(90deg, #744621 0 16px, #8a5529 16px 34px, #5f381a 34px 52px);
+        box-shadow:
+          inset 0 0 0 4px rgba(255, 221, 158, 0.26),
+          inset 0 0 24px rgba(24, 13, 6, 0.58),
+          0 22px 54px rgba(34, 20, 10, 0.34);
         transition: box-shadow 360ms ease;
       }
 
@@ -63,11 +73,24 @@
         position: relative;
         display: grid;
         place-items: center;
-        font-size: clamp(30px, 8vw, 58px);
+        font-size: clamp(34px, 8.6vw, 64px);
         line-height: 1;
         user-select: none;
         cursor: pointer;
         overflow: hidden;
+        box-shadow:
+          inset 1px 1px 0 rgba(255, 255, 255, 0.22),
+          inset -1px -1px 0 rgba(30, 13, 4, 0.16);
+      }
+
+      .square::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(115deg, rgba(255, 255, 255, 0.16), transparent 24%, rgba(0, 0, 0, 0.08) 68%, transparent),
+          repeating-linear-gradient(7deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 12px);
+        pointer-events: none;
       }
 
       .piece {
@@ -77,7 +100,40 @@
         place-items: center;
         width: 100%;
         height: 100%;
+        font-family: "Times New Roman", Georgia, serif;
+        font-weight: 700;
+        transform: translateY(-2%);
         will-change: transform;
+      }
+
+      .piece::after {
+        content: "";
+        position: absolute;
+        width: 58%;
+        height: 12%;
+        bottom: 11%;
+        border-radius: 50%;
+        background: rgba(21, 13, 7, 0.22);
+        filter: blur(4px);
+        z-index: -1;
+      }
+
+      .piece.white-piece {
+        color: #fff4cf;
+        -webkit-text-stroke: 1.1px rgba(82, 58, 32, 0.7);
+        text-shadow:
+          0 1px 0 #fffaf0,
+          0 3px 0 #d7bd82,
+          0 5px 7px rgba(45, 28, 12, 0.42);
+      }
+
+      .piece.black-piece {
+        color: #2b1b12;
+        -webkit-text-stroke: 1px rgba(224, 178, 96, 0.34);
+        text-shadow:
+          0 1px 0 rgba(255, 226, 163, 0.24),
+          0 3px 0 #0f0905,
+          0 6px 8px rgba(0, 0, 0, 0.52);
       }
 
       .piece.moved {
@@ -116,11 +172,15 @@
       }
 
       .square.white {
-        background: #f0d9b5;
+        background:
+          linear-gradient(135deg, rgba(255, 243, 203, 0.7), transparent 45%, rgba(149, 87, 35, 0.16)),
+          repeating-linear-gradient(90deg, #d9b982 0 12px, #edcf99 12px 28px, #cda66f 28px 42px);
       }
 
       .square.black {
-        background: #b58863;
+        background:
+          linear-gradient(135deg, rgba(255, 210, 128, 0.16), transparent 42%, rgba(20, 8, 3, 0.26)),
+          repeating-linear-gradient(90deg, #6b3d1e 0 14px, #83502a 14px 30px, #4f2b15 30px 46px);
       }
 
       .square.selected {
@@ -330,6 +390,7 @@
             if (pieces[y][x]) {
               const pieceElement = document.createElement("span");
               pieceElement.classList.add("piece");
+              pieceElement.classList.add(isWhite(pieces[y][x]) ? "white-piece" : "black-piece");
               pieceElement.textContent = pieces[y][x];
 
               if (moveToAnimate && moveToAnimate.toX === x && moveToAnimate.toY === y) {
